@@ -31,9 +31,56 @@
   }
 }
 
-#git {
-  position: fixed;
-  top: 480px;
-  left: 1330px;
-  z-index: 9999;
+.slidebarDots {
+  position: absolute;
+  width: 100%;
+  bottom: 100px;  
+  @extend %flex-center;
+  $pillsize: 30px;
+  span {
+    background: $text;
+    border-radius: $pillsize/2;
+    border-color: $secondary;
+    border-width: 1px;
+    border-style: solid;
+    width: $pillsize;
+    height: $pillsize;
+    z-index: 101;
+    margin-right: 5px;
+    @extend %material-shadow;    
+  }    
+  .active {
+    // v1
+    // border-width: 4px;
+    // width: $pillsize - 4px;
+    // height: $pillsize - 4px;
+    // v2
+    border-color: $text;
+    background: $secondary;
+  }
+}
+
+.sliderbarArrows{
+  position: absolute;
+  top: 35vh;
+  width: 100%;
+  span{
+    position: absolute;
+    font-size: 10rem;    
+    color: $tetriary;
+    width: 100px;
+  }
+  .left{
+    left: 20px;
+  }
+  .right{
+    right:0px;
+  }
+  .left:before{
+    content:'<'
+  }
+  .right:before{
+    content:'>'
+  }
+  z-index: 101;
 }

@@ -5,9 +5,10 @@ const styleFix = style
 import { initMouseFollow } from './pixi/mouseFollow'
 import { Graphics, Sprite, Container } from 'pixi.js'
 import { findNewPoint, distance, pointsAngleDeg, checkIntersection } from './util/math'
+import * as PixiFilters from 'pixi-filters'
 
 initRenderer()
-// initMouseFollow()
+
 // initCircleSquare()
 // initAnimatedTriangles()
 
@@ -30,3 +31,5 @@ ticker.add((delta)=> {
 
 
 stage.addChild(graphics);
+
+initMouseFollow()

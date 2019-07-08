@@ -2,9 +2,9 @@
 @import 'mixins';
 
 $primary: #FFFFFF;
-$secondary: #00FFED;
-$tetriary: #FF00DC;
-$background: #eceff1;
+$secondary: #eceff1;
+$tetriary: #cccccc;
+$background: #FFFFFF;
 $text: #121212;
 
 
@@ -16,6 +16,7 @@ body{
   color: $text;
   @extend %flex-center;
   align-items: flex-start;
+  cursor: none;
 }
 
 h1{
