@@ -1,0 +1,45 @@
+.main-nav {
+  font-weight: 400;
+  color: $text;
+  font-size: 1.4rem;
+  width: 95vw;
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  a{
+    text-decoration: none;
+    color: $text;
+  };
+  z-index: 9999;
+}
+
+$logo-size: 80px;
+.nav-logo {
+  margin-top: 7px;
+  font-weight: 1000;
+  color: $text;
+  // background-color: $primary;
+  // width: $logo-size;
+  // height: $logo-size;
+  // border-radius: $logo-size/2;
+  font-size: $logo-size*0.7;
+  @extend %flex-center;
+}
+
+.nav-logo-img {
+  max-width: 8rem;
+  margin-top: 7px;
+}
+
+.fillbar {
+  width: 8rem;
+}
+
+.nav-links {
+  a{
+    margin-left:30px;
+    letter-spacing: 2px;
+  }
+
+}
