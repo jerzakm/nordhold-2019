@@ -1,19 +1,22 @@
 <h1>svelte-spa-router example</h1>
 <!-- Navigation links, using the "link" action -->
 <!-- Also, use the "active" action to add the "active" CSS class when the URL matches -->
-<ul class="navigation-links">
+
+<!-- <ul class="navigation-links">
     <li><a href="/" use:link use:active>Home</a></li>
     <li><a href="/brand" use:link><b>Brand</b></a></li>
     <li><a href="/hello/svelte" use:link use:active={'/hello/*', 'active'}>Say hi!</a></li>
     <li><a href="/does/not/exist" use:link>Not found</a></li>
-</ul>
+</ul> -->
+
+<Nav></Nav>
 
 <!-- Navigate with buttons -->
-<p class="navigation-buttons">
+<!-- <p class="navigation-buttons">
     <button on:click={() => push('/wild/something')}>Visit /wild/something</button>
     <button on:click={() => pop()}>Go back</button>
     <button on:click={() => replace('/wild/replaced')}>Replace current page</button>
-</p>
+</p> -->
 
 <!-- Query string -->
 <a href="/hello/svelte?quantity=100" use:link use:active={'/hello/*'}>Querystring args</a>
@@ -36,6 +39,9 @@
 </style>
 
 <script>
+
+import Nav from './nav/Nav.svelte'
+
 // Import the router component
 // Normally, this would be import: `import Router from 'svelte-spa-router'`
 import Router from 'svelte-spa-router'

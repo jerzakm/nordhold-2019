@@ -3,6 +3,7 @@ import Name from './routes/Name.svelte'
 import Wild from './routes/Wild.svelte'
 import Regex from './routes/Regex.svelte'
 import NotFound from './routes/NotFound.svelte'
+import Contact from './routes/Contact.svelte'
 
 // This demonstrates how to pass routes as a POJO (Plain Old JavaScript Object) or a JS Map
 // In this code sample we're using both (controlling at runtime what's enabled, by checking for the 'routemap=1' querystring parameter) just because we are using this code sample for tests too
@@ -16,6 +17,7 @@ if (!urlParams.has('routemap')) {
     routes = {
         // Exact path
         '/': Home,
+        '/contact': Contact,
     
         // Allow children to also signal link activation
         '/brand': Home,
