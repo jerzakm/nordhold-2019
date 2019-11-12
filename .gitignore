@@ -62,4 +62,5 @@ typings/
 
 .jpg
 .png
-dist/
+.rpt2_cache/
+dist
