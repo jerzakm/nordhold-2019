@@ -1,85 +1,101 @@
-import svelte from 'rollup-plugin-svelte'
-import resolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
-import serve from 'rollup-plugin-serve'
-import livereload from 'rollup-plugin-livereload'
-import postcss from 'rollup-plugin-postcss'
-import scss from 'rollup-plugin-scss'
-import html from 'rollup-plugin-bundle-html'
-import autoPreprocess from 'svelte-preprocess'
+import resolve from 'rollup-plugin-node-resolve';
+import replace from 'rollup-plugin-replace';
+import commonjs from 'rollup-plugin-commonjs';
+import svelte from 'rollup-plugin-svelte';
+import babel from 'rollup-plugin-babel';
+import { terser } from 'rollup-plugin-terser';
+import config from 'sapper/config/rollup.js';
+import pkg from './package.json';
 
-import {
-    terser
-} from "rollup-plugin-terser"
-import typescript from "rollup-plugin-typescript2"
+const mode = process.env.NODE_ENV;
+const dev = mode === 'development';
+const legacy = !!process.env.SAPPER_LEGACY_BUILD;
 
-const production = false
-
-import {
-    preprocess,
-    createEnv,
-    readConfigFile
-} from "@pyoner/svelte-ts-preprocess";
+const onwarn = (warning, onwarn) => (warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) || onwarn(warning);
+const dedupe = importee => importee === 'svelte' || importee.startsWith('svelte/');
 
 export default {
-    input: 'src/main.ts',
-    output: {
-        sourcemap: true,
-        format: 'iife',
-        name: 'app',
-        file: 'dist/bundle.js'
-    },
-    watch: {
-        exclude: ['node_modules/**']
-    },
-    plugins: [
-        scss(),
-        svelte({
-            // enable run-time checks when not in production
-            dev: !production,
-            // we'll extract any component CSS out into
-            // a separate file  better for performance
-            // css: css => {
-            //     css.write('dist/bundle.css')
-            // },
-            preprocess: autoPreprocess()
-        }),
-        html({
-            template: 'src/index.html',
-            dest: "dist",
-            filename: 'index.html',
-            inject: 'body'
-        }),
-        postcss({
-            extract: true,
-            minimize: false,
-            use: [
-                ['sass', {
-                    includePaths: [
-                        './src/styles/theme',
-                        './node_modules'
-                    ]
-                }]
-            ]
-        }),
-        resolve(),
-        commonjs(),
-        typescript(),
-        serve({
-            // Launch in browser (default: false)
-            open: true,
+	client: {
+		input: config.client.input(),
+		output: config.client.output(),
+		plugins: [
+			replace({
+				'process.browser': true,
+				'process.env.NODE_ENV': JSON.stringify(mode)
+			}),
+			svelte({
+				dev,
+				hydratable: true,
+				emitCss: true
+			}),
+			resolve({
+				browser: true,
+				dedupe
+			}),
+			commonjs(),
 
-            // Folder to serve files from
-            contentBase: '',
+			legacy && babel({
+				extensions: ['.js', '.mjs', '.html', '.svelte'],
+				runtimeHelpers: true,
+				exclude: ['node_modules/@babel/**'],
+				presets: [
+					['@babel/preset-env', {
+						targets: '> 0.25%, not dead'
+					}]
+				],
+				plugins: [
+					'@babel/plugin-syntax-dynamic-import',
+					['@babel/plugin-transform-runtime', {
+						useESModules: true
+					}]
+				]
+			}),
 
-            // Multiple folders to serve from
-            contentBase: ['dist'],
+			!dev && terser({
+				module: true
+			})
+		],
 
-            // Options used in setting up server
-            host: 'localhost',
-            port: 3000,
-        }),
+		onwarn,
+	},
 
-        livereload()
-    ]
-}
+	server: {
+		input: config.server.input(),
+		output: config.server.output(),
+		plugins: [
+			replace({
+				'process.browser': false,
+				'process.env.NODE_ENV': JSON.stringify(mode)
+			}),
+			svelte({
+				generate: 'ssr',
+				dev
+			}),
+			resolve({
+				dedupe
+			}),
+			commonjs()
+		],
+		external: Object.keys(pkg.dependencies).concat(
+			require('module').builtinModules || Object.keys(process.binding('natives'))
+		),
+
+		onwarn,
+	},
+
+	serviceworker: {
+		input: config.serviceworker.input(),
+		output: config.serviceworker.output(),
+		plugins: [
+			resolve(),
+			replace({
+				'process.browser': true,
+				'process.env.NODE_ENV': JSON.stringify(mode)
+			}),
+			commonjs(),
+			!dev && terser()
+		],
+
+		onwarn,
+	}
+};
