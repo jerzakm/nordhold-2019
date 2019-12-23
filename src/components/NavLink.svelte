@@ -8,7 +8,7 @@
 <a
   {rel}
   {href}
-  class="block mt-4 lg:mx-4 lg:inline-block lg:mt-0 {segment === href ? 'text-white' : 'text-teal-200'}
-  hover:text-white">
+  class="block mt-4 lg:mx-4 lg:inline-block lg:mt-0 {segment === href ? 'text-black' : 'text-black'}
+  hover:text-blue-500">
   {text}
 </a>
