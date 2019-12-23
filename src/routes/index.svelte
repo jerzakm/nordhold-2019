@@ -1,3 +1,9 @@
+
+
+<script>
+
+</script>
+
 <svelte:head>
 	<title>Nordhold</title>
 </svelte:head>

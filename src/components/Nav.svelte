@@ -3,6 +3,10 @@
   import NavLink from "./NavLink.svelte";
 
   export let segment;
+  export let routes;
+
+  console.log(routes)
+
   let expand = false;
 
   function toggleMobileMenu(event) {
@@ -27,8 +31,9 @@
   </div>
   <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
     <div class="{!expand && 'hidden'} lg:block text-sm lg:flex-grow">
-      <NavLink text="About" href="about" {segment} />
-      <NavLink text="Blog" href="blog" {segment} rel="prefetch" />
+      {#each Object.values(routes) as item}
+        <NavLink text={item.en} href={item.url} {segment} rel="prefetch" />
+      {/each}
     </div>
   </div>
 </nav>

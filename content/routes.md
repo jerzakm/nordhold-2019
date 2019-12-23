@@ -8,7 +8,7 @@
         en: chairs
         pl: fotele
     desks:
-        url: /products/chairs
+        url: /products/desks
         en: desks
         pl: biurka
     contact:
